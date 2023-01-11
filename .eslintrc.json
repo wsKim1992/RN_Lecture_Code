@@ -1,0 +1,35 @@
+{
+  "env": {
+    "node": true,
+    "jest": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaFetures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react", "react-native", "prettier"],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "no-unused-vars": "off",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "quotes": ["error", "double"],
+    "semi": ["error", "always"],
+    "no-empty-function": "off"
+  }
+}
