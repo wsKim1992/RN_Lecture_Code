@@ -8,10 +8,10 @@ const DUMMY_EXPENSES = [
         date: new Date("2021-12-19"),
     },
     {
-        id: "e12",
+        id: "e2",
         description: "A pair of shoes",
         amount: 29.99,
-        date: new Date("2021-01-05"),
+        date: new Date("2023-01-05"),
     },
     {
         id: "e3",
@@ -35,19 +35,19 @@ const DUMMY_EXPENSES = [
         id: "e6",
         description: "kim bob",
         amount: 104.01,
-        date: new Date("2021-10-05"),
+        date: new Date("2023-01-05"),
     },
     {
         id: "e7",
         description: "porn",
         amount: 154.31,
-        date: new Date("2021-11-05"),
+        date: new Date("2023-01-10"),
     },
     {
         id: "e8",
         description: "gay porn",
         amount: 154.31,
-        date: new Date("2023-01-05"),
+        date: new Date("2023-01-11"),
     },
 ];
 
@@ -59,6 +59,7 @@ export const ExpensesContext = createContext({
 });
 
 function expensesReducer(state, action) {
+    console.log(action.type);
     switch (action.type) {
         case "ADD":
             const id = `${new Date().toString()} ${Math.random().toString()}`;
@@ -80,13 +81,17 @@ function expensesReducer(state, action) {
 }
 
 function ExpensesContextProvider({ children }) {
-    const [espensesState, dispatch] = useReducer(expensesReducer, DUMMY_EXPENSES);
+    const [espensesState, dispatch] = useReducer(
+        expensesReducer,
+        DUMMY_EXPENSES
+    );
 
     function addExpense(expenseData) {
         dispatch({ type: "ADD", payload: expenseData });
     }
 
     function deleteExpense(id) {
+        console.log(id);
         dispatch({ type: "DELETE", payload: id });
     }
 
@@ -94,7 +99,18 @@ function ExpensesContextProvider({ children }) {
         dispatch({ type: "UPDATE", payload: { id, data: expenseData } });
     }
 
-    return <ExpensesContext.Provider>{children}</ExpensesContext.Provider>;
+    const value = {
+        expenses: espensesState,
+        addExpense,
+        deleteExpense,
+        updateExpense,
+    };
+
+    return (
+        <ExpensesContext.Provider value={value}>
+            {children}
+        </ExpensesContext.Provider>
+    );
 }
 
 export default ExpensesContextProvider;

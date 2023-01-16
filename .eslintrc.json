@@ -7,7 +7,8 @@
         "eslint:recommended",
         "plugin:react/recommended",
         "plugin:react-hooks/recommended",
-        "plugin:prettier/recommended"
+        "plugin:prettier/recommended",
+        "plugin:import/recommended"
     ],
     "overrides": [],
     "parserOptions": {
@@ -18,6 +19,7 @@
         "sourceType": "module"
     },
     "plugins": ["react", "react-native", "prettier"],
+    "ignorePatterns": ["node_modules/"],
     "rules": {
         "prettier/prettier": "error",
         "no-unused-vars": "off",
@@ -25,8 +27,113 @@
         "react/prop-types": "off",
         "quotes": ["error", "double"],
         "semi": ["error", "always"],
-        "no-empty-function": "off",
+        "no-empty-function": "error",
         "no-case-declarations": "off",
-        "indent": "off"
+        "indent": "off",
+        "no-alert": "error",
+        "react/jsx-filename-extension": [
+            "error",
+            { "extensions": ["js", "jsx"] }
+        ],
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "json": "always",
+                "svg": "always",
+                "jpg": "always",
+                "png": "always"
+            }
+        ],
+        "import/prefer-default-export": "off",
+        "import/no-unresolved": "off",
+        "import/namespace": "off",
+        "import/order": [
+            "error",
+            {
+                "groups": ["external", "internal", "parent", "sibling"],
+                "pathGroups": [
+                    {
+                        "pattern": "react",
+                        "group": "external",
+                        "position": "before"
+                    },
+                    {
+                        "pattern": "@expo/**",
+                        "group": "external",
+                        "position": "before"
+                    },
+                    {
+                        "pattern": "react-native",
+                        "group": "external",
+                        "position": "after"
+                    },
+                    {
+                        "pattern": "@react-navigation",
+                        "group": "external",
+                        "position": "before"
+                    },
+                    {
+                        "pattern": "@stores",
+                        "group": "internal",
+                        "position": "before"
+                    },
+                    {
+                        "pattern": "@components",
+                        "group": "internal",
+                        "position": "before"
+                    },
+                    {
+                        "pattern": "@assets",
+                        "group": "internal",
+                        "position": "before"
+                    },
+                    {
+                        "pattern": "@constant",
+                        "group": "internal",
+                        "position": "before"
+                    },
+                    {
+                        "pattern": "@screens",
+                        "group": "internal",
+                        "position": "before"
+                    },
+                    {
+                        "pattern": "@util",
+                        "group": "internal",
+                        "position": "before"
+                    },
+                    {
+                        "pattern": "./**",
+                        "group": "sibling",
+                        "position": "before"
+                    },
+                    {
+                        "pattern": "../**",
+                        "group": "parent",
+                        "position": "before"
+                    }
+                ],
+                "newlines-between": "always",
+                "alphabetize": {
+                    "order": "asc",
+                    "caseInsensitive": true
+                }
+            }
+        ]
+    },
+    "settings": {
+        "react": {
+            "version": "detect"
+        },
+        "import/resolver": {
+            "node": {
+                "paths": ["./"],
+                "extensions": ["js", "jsx", "ts", "tsx"],
+                "moduleDirectory": ["node_modules"]
+            }
+        }
     }
 }
