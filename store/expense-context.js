@@ -80,7 +80,7 @@ function expensesReducer(state, action) {
     }
 }
 
-function ExpensesContextProvider({ children }) {
+var ExpensesContextProvider = ({ children }) => {
     const [espensesState, dispatch] = useReducer(
         expensesReducer,
         DUMMY_EXPENSES
@@ -111,6 +111,6 @@ function ExpensesContextProvider({ children }) {
             {children}
         </ExpensesContext.Provider>
     );
-}
+};
 
 export default ExpensesContextProvider;

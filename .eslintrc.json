@@ -1,139 +1,51 @@
 {
-    "env": {
-        "node": true,
-        "jest": true
-    },
-    "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended",
-        "plugin:react-hooks/recommended",
-        "plugin:prettier/recommended",
-        "plugin:import/recommended"
-    ],
-    "overrides": [],
-    "parserOptions": {
-        "ecmaFetures": {
-            "jsx": true
-        },
-        "ecmaVersion": 12,
-        "sourceType": "module"
-    },
-    "plugins": ["react", "react-native", "prettier"],
-    "ignorePatterns": ["node_modules/"],
-    "rules": {
-        "prettier/prettier": "error",
-        "no-unused-vars": "off",
-        "react/react-in-jsx-scope": "off",
-        "react/prop-types": "off",
-        "quotes": ["error", "double"],
-        "semi": ["error", "always"],
-        "no-empty-function": "error",
-        "no-case-declarations": "off",
-        "indent": "off",
-        "no-alert": "error",
-        "react/jsx-filename-extension": [
-            "error",
-            { "extensions": ["js", "jsx"] }
-        ],
-        "import/extensions": [
-            "error",
-            "ignorePackages",
-            {
-                "js": "never",
-                "jsx": "never",
-                "json": "always",
-                "svg": "always",
-                "jpg": "always",
-                "png": "always"
-            }
-        ],
-        "import/prefer-default-export": "off",
-        "import/no-unresolved": "off",
-        "import/namespace": "off",
-        "import/order": [
-            "error",
-            {
-                "groups": ["external", "internal", "parent", "sibling"],
-                "pathGroups": [
-                    {
-                        "pattern": "react",
-                        "group": "external",
-                        "position": "before"
-                    },
-                    {
-                        "pattern": "@expo/**",
-                        "group": "external",
-                        "position": "before"
-                    },
-                    {
-                        "pattern": "react-native",
-                        "group": "external",
-                        "position": "after"
-                    },
-                    {
-                        "pattern": "@react-navigation",
-                        "group": "external",
-                        "position": "before"
-                    },
-                    {
-                        "pattern": "@stores",
-                        "group": "internal",
-                        "position": "before"
-                    },
-                    {
-                        "pattern": "@components",
-                        "group": "internal",
-                        "position": "before"
-                    },
-                    {
-                        "pattern": "@assets",
-                        "group": "internal",
-                        "position": "before"
-                    },
-                    {
-                        "pattern": "@constant",
-                        "group": "internal",
-                        "position": "before"
-                    },
-                    {
-                        "pattern": "@screens",
-                        "group": "internal",
-                        "position": "before"
-                    },
-                    {
-                        "pattern": "@util",
-                        "group": "internal",
-                        "position": "before"
-                    },
-                    {
-                        "pattern": "./**",
-                        "group": "sibling",
-                        "position": "before"
-                    },
-                    {
-                        "pattern": "../**",
-                        "group": "parent",
-                        "position": "before"
-                    }
-                ],
-                "newlines-between": "always",
-                "alphabetize": {
-                    "order": "asc",
-                    "caseInsensitive": true
-                }
-            }
-        ]
-    },
-    "settings": {
-        "react": {
-            "version": "detect"
-        },
-        "import/resolver": {
-            "node": {
-                "paths": ["./"],
-                "extensions": ["js", "jsx", "ts", "tsx"],
-                "moduleDirectory": ["node_modules"]
-            }
-        }
-    }
+	"env": {
+		"node": true,
+		"es2021": true
+	},
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:prettier/recommended"
+	],
+	"overrides": [],
+	"parserOptions": {
+		"ecmaFetures": {
+			"jsx": true
+		},
+		"ecmaVersion": 12,
+		"sourceType": "module"
+	},
+	"plugins": ["react", "prettier", "import"],
+	"ignorePatterns": ["node_modules/"],
+	"rules": {
+		"no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
+		"prettier/prettier": "error",
+		"no-alert": "error",
+		"no-console": "error",
+		"semi": ["error", "always"],
+		"arrow-body-style": "off",
+		"no-unused-vars": "error",
+		"no-case-declarations": "off",
+		"react/react-in-jsx-scope": "off",
+		"react/self-closing-comp": "error",
+		"react/function-component-definition": [
+			"error",
+			{ "namedComponents": "arrow-function" }
+		],
+		"react/jsx-filename-extension": [
+			"off",
+			{ "extensions": ["js", "jsx"] }
+		],
+		"react/prop-types": "off",
+		"react/jsx-props-no-spreading": "off",
+		"react/require-default-props": "off",
+		"react/destructuring-assignment": "off",
+		"import/no-unresolved": "off",
+		"import/prefer-default-export": "off",
+		"import/extensions": ["error", "never", { "json": "always" }]
+	},
+	"settings": {
+		"react": { "version": "detect" }
+	}
 }
