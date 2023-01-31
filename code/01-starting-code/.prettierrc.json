@@ -10,12 +10,14 @@
 	"importOrder": [
 		"^react(.*)",
 		"^react-native(.*)",
+		"^@react(.*)",
 		"<THIRD_PARTY_MODULES>",
 		"^@store/(.*)$",
 		"^@util/(.*)$",
 		"^@constants/(.*)$",
 		"^@assets/(.*)$",
 		"^@components/(.*)$",
+		"@/(.*)",
 		"^[./]"
 	],
 	"importOrderSeparation": true,

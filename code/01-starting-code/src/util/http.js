@@ -2,8 +2,13 @@ import axios from 'axios';
 
 import { firebaseURL } from '@constants/firebaseURL';
 
-export function storeExpense(expenseData) {
-	axios.post(`${firebaseURL}/expenses.json`, expenseData);
+export async function storeExpense(expenseData) {
+	const response = await axios.post(
+		`${firebaseURL}/expenses.json`,
+		expenseData
+	);
+	const id = response.data.name;
+	return id;
 }
 
 export async function fetchExpenses() {
@@ -19,7 +24,14 @@ export async function fetchExpenses() {
 			description: response.data[key].description,
 		};
 		expenses[expenses.length] = expenseObj;
-
-		return expenses;
 	}
+	return expenses;
+}
+
+export function updateExpense(id, expenseData) {
+	return axios.put(`${firebaseURL}/expenses/${id}.json`, expenseData);
+}
+
+export function deleteExpense(id) {
+	return axios.delete(`${firebaseURL}/expenses/${id}.json`);
 }

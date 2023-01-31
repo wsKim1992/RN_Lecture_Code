@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { getFormattedDate } from '@util/date';
 
 import { GlobalStyles } from '@constants/styles';
 
-import Button from '../UI/Button';
+import Button from '@components/UI/Button';
+
 import Input from './Input';
 
 const ExpenseForm = ({
