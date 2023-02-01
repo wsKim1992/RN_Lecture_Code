@@ -1,13 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { StyleSheet, Text, View } from 'react-native';
-
-import { getFormattedDate } from '@util/date';
 
 import { GlobalStyles } from '@constants/styles';
 
+import DateInput from '@components/ManageExpense/DateInput';
+import Input from '@components/ManageExpense/Input';
 import Button from '@components/UI/Button';
 
-import Input from './Input';
+const amountRules = {
+	required: {
+		value: true,
+		message: '가격은 필수 입니다. 쳐 적으세요 뒤지기 싫으면',
+	},
+	min: { value: 2.0, message: '최소 2 입니다.' },
+	max: { value: 200.0, message: '최대 200원 입니다.' },
+	valueAsNumber: true,
+	pattern: {
+		value: /^(0|[1-9]\d*)(\.\d+)?$/,
+		message: '오직 숫자만 입력해 주세요!',
+	},
+	validate: (amount) => ({
+		value: amount <= 0,
+		message: '양수여야 합니다. 생각을 좀 쳐 하고 입력하세요.',
+	}),
+};
+
+const dateRules = {
+	required: {
+		value: true,
+		message: '날짜 입력하세요.',
+	},
+};
+
+const descriptionRules = {
+	required: {
+		value: true,
+		message: '상세 설명 입력 하세요.',
+	},
+};
 
 const ExpenseForm = ({
 	submitButtonLabel,
@@ -15,118 +46,56 @@ const ExpenseForm = ({
 	onSubmit,
 	defaultValues,
 }) => {
-	const [inputs, setInputs] = useState({
-		amount: {
-			value: defaultValues ? defaultValues.amount.toString() : '',
-			isValid: true,
-		},
-		date: {
-			value: defaultValues ? getFormattedDate(defaultValues.date) : '',
-			isValid: true,
-		},
-		description: {
-			value: defaultValues ? defaultValues.description : '',
-			isValid: true,
-		},
-	});
-
-	function inputChangedHandler(inputIdentifier, enteredValue) {
-		setInputs((curInputs) => {
-			return {
-				...curInputs,
-				[inputIdentifier]: { value: enteredValue, isValid: true },
-			};
-		});
-	}
-
-	function submitHandler() {
-		const expenseData = {
-			amount: +inputs.amount.value,
-			date: new Date(inputs.date.value),
-			description: inputs.description.value,
-		};
-
-		const amountIsValid =
-			!isNaN(expenseData.amount) && expenseData.amount > 0;
-		const dateIsValid = expenseData.date.toString() !== 'Invalid Date';
-		const descriptionIsValid = expenseData.description.trim().length > 0;
-
-		if (!amountIsValid || !dateIsValid || !descriptionIsValid) {
-			// Alert.alert('Invalid input', 'Please check your input values');
-			setInputs((curInputs) => {
-				return {
-					amount: {
-						value: curInputs.amount.value,
-						isValid: amountIsValid,
-					},
-					date: { value: curInputs.date.value, isValid: dateIsValid },
-					description: {
-						value: curInputs.description.value,
-						isValid: descriptionIsValid,
-					},
-				};
-			});
-			return;
-		}
-
-		onSubmit(expenseData);
-	}
-
-	const formIsInvalid =
-		!inputs.amount.isValid ||
-		!inputs.date.isValid ||
-		!inputs.description.isValid;
-
+	const methods = useForm({ defaultValues });
+	const { handleSubmit } = methods;
 	return (
 		<View style={styles.form}>
-			<Text style={styles.title}>Your Expense</Text>
-			<View style={styles.inputsRow}>
+			<FormProvider {...methods}>
+				<Text style={styles.title}>Your Expense</Text>
+				<View style={styles.inputsRow}>
+					<Input
+						style={styles.rowInput}
+						label="amount"
+						keyboardType="decimal-pad"
+						multiline={false}
+						rules={amountRules}
+					/>
+					{/* <DateInput
+						style={styles.rowInput}
+						label="date"
+						keyboardType="numeric"
+						multiline={false}
+						
+						rules={dateRules}
+					/> */}
+				</View>
 				<Input
-					style={styles.rowInput}
-					label="Amount"
-					invalid={!inputs.amount.isValid}
-					textInputConfig={{
-						keyboardType: 'decimal-pad',
-						onChangeText: inputChangedHandler.bind(this, 'amount'),
-						value: inputs.amount.value,
-					}}
+					label="description"
+					multiline
+					keyboardType="default"
+					rules={descriptionRules}
 				/>
-				<Input
-					style={styles.rowInput}
-					label="Date"
-					invalid={!inputs.date.isValid}
-					textInputConfig={{
-						placeholder: 'YYYY-MM-DD',
-						maxLength: 10,
-						onChangeText: inputChangedHandler.bind(this, 'date'),
-						value: inputs.date.value,
-					}}
-				/>
-			</View>
-			<Input
-				label="Description"
-				invalid={!inputs.description.isValid}
-				textInputConfig={{
-					multiline: true,
-					// autoCapitalize: 'none'
-					// autoCorrect: false // default is true
-					onChangeText: inputChangedHandler.bind(this, 'description'),
-					value: inputs.description.value,
-				}}
-			/>
-			{formIsInvalid && (
-				<Text style={styles.errorText}>
-					Invalid input values - please check your entered data!
-				</Text>
-			)}
-			<View style={styles.buttons}>
-				<Button style={styles.button} mode="flat" onPress={onCancel}>
-					Cancel
-				</Button>
-				<Button style={styles.button} onPress={submitHandler}>
-					{submitButtonLabel}
-				</Button>
-			</View>
+				{/* {formIsInvalid && (
+					<Text style={styles.errorText}>
+						Invalid input values - please check your entered data!
+					</Text>
+				)} */}
+				<View style={styles.buttons}>
+					<Button
+						style={styles.button}
+						mode="flat"
+						onPress={onCancel}
+					>
+						Cancel
+					</Button>
+					<Button
+						style={styles.button}
+						onPress={handleSubmit(onSubmit)}
+					>
+						{submitButtonLabel}
+					</Button>
+				</View>
+			</FormProvider>
 		</View>
 	);
 };

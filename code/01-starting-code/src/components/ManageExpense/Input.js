@@ -1,55 +1,53 @@
-import { StyleSheet, Text, TextInput, View } from 'react-native';
+import { Controller, useFormContext } from 'react-hook-form';
+import { Text, TextInput, View } from 'react-native';
 
-import { GlobalStyles } from '../../constants/styles';
+import { InputStyles } from '@constants/inputStyle';
 
-const Input = ({ label, invalid, style, textInputConfig }) => {
-	const inputStyles = [styles.input];
+const Input = ({ label, style, multiline, keyboardType, rules }) => {
+	const inputStyles = [InputStyles.input];
+	const {
+		control,
+		formState: { errors },
+	} = useFormContext();
 
-	if (textInputConfig && textInputConfig.multiline) {
-		inputStyles.push(styles.inputMultiline);
+	if (multiline) {
+		inputStyles.push(InputStyles.inputMultiline);
 	}
 
-	if (invalid) {
-		inputStyles.push(styles.invalidInput);
+	if (errors[label]) {
+		inputStyles.push(InputStyles.invalidInput);
 	}
 
 	return (
-		<View style={[styles.inputContainer, style]}>
-			<Text style={[styles.label, invalid && styles.invalidLabel]}>
-				{label}
-			</Text>
-			<TextInput style={inputStyles} {...textInputConfig} />
-		</View>
+		<Controller
+			control={control}
+			name={label}
+			rules={rules}
+			render={({ field: { onChange, onBlur, value } }) => {
+				return (
+					<View style={[InputStyles.inputContainer, style]}>
+						<Text
+							style={[
+								InputStyles.label,
+								errors[label] && InputStyles.invalidLabel,
+							]}
+						>
+							{label}
+						</Text>
+						<TextInput
+							value={`${value}`}
+							multiline={multiline}
+							onBlur={onBlur}
+							onChangeText={onChange}
+							editable
+							style={inputStyles}
+							keyboardType={keyboardType}
+						/>
+					</View>
+				);
+			}}
+		/>
 	);
 };
 
 export default Input;
-
-const styles = StyleSheet.create({
-	inputContainer: {
-		marginHorizontal: 4,
-		marginVertical: 8,
-	},
-	label: {
-		fontSize: 12,
-		color: GlobalStyles.colors.primary100,
-		marginBottom: 4,
-	},
-	input: {
-		backgroundColor: GlobalStyles.colors.primary100,
-		color: GlobalStyles.colors.primary700,
-		padding: 6,
-		borderRadius: 6,
-		fontSize: 18,
-	},
-	inputMultiline: {
-		minHeight: 100,
-		textAlignVertical: 'top',
-	},
-	invalidLabel: {
-		color: GlobalStyles.colors.error500,
-	},
-	invalidInput: {
-		backgroundColor: GlobalStyles.colors.error50,
-	},
-});

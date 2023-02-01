@@ -39,15 +39,16 @@ const ManageExpense = ({ route, navigation }) => {
 	}
 
 	async function confirmHandler(expenseData) {
-		setIsSubmitting(true);
-		if (isEditing) {
+		//setIsSubmitting(true);
+		console.log(expenseData);
+		/* if (isEditing) {
 			await updateExpense(editedExpenseId, expenseData);
 			expensesCtx.updateExpense(editedExpenseId, expenseData);
 		} else {
 			const id = await storeExpense(expenseData);
 			expensesCtx.addExpense({ ...expenseData, id });
 		}
-		navigation.goBack();
+		navigation.goBack(); */
 	}
 
 	if (isSubmitting) {
