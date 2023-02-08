@@ -15,13 +15,13 @@ const amountRules = {
 	},
 	min: { value: 2.0, message: '최소 2 입니다.' },
 	max: { value: 200.0, message: '최대 200원 입니다.' },
-	valueAsNumber: true,
+	valueAsNumber: { value: true, message: '숫자만 쳐 입력하세요.' },
 	pattern: {
 		value: /^(0|[1-9]\d*)(\.\d+)?$/,
 		message: '오직 숫자만 입력해 주세요!',
 	},
 	validate: (amount) => ({
-		value: amount <= 0,
+		value: amount > 0,
 		message: '양수여야 합니다. 생각을 좀 쳐 하고 입력하세요.',
 	}),
 };
@@ -30,6 +30,13 @@ const dateRules = {
 	required: {
 		value: true,
 		message: '날짜 입력하세요.',
+	},
+	pattern: {
+		value: /d{4}-(0[1-9]|1[012])-(0[1-9]|[12][0-9]|3[01])/,
+		message: '날짜 형식에 맞춰 주세요!',
+	},
+	validate: (value) => {
+		return Date.now() - value > 0;
 	},
 };
 
@@ -60,14 +67,13 @@ const ExpenseForm = ({
 						multiline={false}
 						rules={amountRules}
 					/>
-					{/* <DateInput
+					<DateInput
 						style={styles.rowInput}
 						label="date"
-						keyboardType="numeric"
+						keyboardType="none"
 						multiline={false}
-						
 						rules={dateRules}
-					/> */}
+					/>
 				</View>
 				<Input
 					label="description"
@@ -75,11 +81,6 @@ const ExpenseForm = ({
 					keyboardType="default"
 					rules={descriptionRules}
 				/>
-				{/* {formIsInvalid && (
-					<Text style={styles.errorText}>
-						Invalid input values - please check your entered data!
-					</Text>
-				)} */}
 				<View style={styles.buttons}>
 					<Button
 						style={styles.button}

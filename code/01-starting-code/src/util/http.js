@@ -28,6 +28,10 @@ export async function fetchExpenses() {
 	return expenses;
 }
 
+export function loadExpense(id) {
+	return axios.get(`${firebaseURL}/expenses/${id}.json`);
+}
+
 export function updateExpense(id, expenseData) {
 	return axios.put(`${firebaseURL}/expenses/${id}.json`, expenseData);
 }

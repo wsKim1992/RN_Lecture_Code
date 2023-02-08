@@ -29,4 +29,15 @@ export const InputStyles = StyleSheet.create({
 	invalidInput: {
 		backgroundColor: GlobalStyles.colors.error50,
 	},
+	inValidMessageViewStyle: {
+		alignSelf: 'stretch',
+		height: 22.5,
+		padding: 2.5,
+	},
+	inValidMessageTextStyle: {
+		fontSize: 14.5,
+		textAlign: 'left',
+		lineHeight: 17.5,
+		color: GlobalStyles.colors.error500,
+	},
 });

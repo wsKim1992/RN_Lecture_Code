@@ -1,11 +1,13 @@
 /* eslint-disable react/style-prop-object */
-import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { Ionicons } from '@expo/vector-icons';
 import AllExpenses from '@screens/AllExpenses';
 import ManageExpense from '@screens/ManageExpense';
 import RecentExpenses from '@screens/RecentExpenses';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { StatusBar } from 'expo-status-bar';
 
 import ExpensesContextProvider from '@store/expenses-context';
@@ -17,6 +19,8 @@ import IconButton from '@components/UI/IconButton';
 
 const Stack = createNativeStackNavigator();
 const BottomTabs = createBottomTabNavigator();
+
+const queryClient = new QueryClient();
 
 const ExpensesOverview = () => {
 	return (
@@ -70,7 +74,7 @@ const ExpensesOverview = () => {
 
 const App = () => {
 	return (
-		<>
+		<QueryClientProvider client={queryClient}>
 			<StatusBar style="light" />
 			<ExpensesContextProvider>
 				<NavigationContainer>
@@ -97,7 +101,7 @@ const App = () => {
 					</Stack.Navigator>
 				</NavigationContainer>
 			</ExpensesContextProvider>
-		</>
+		</QueryClientProvider>
 	);
 };
 

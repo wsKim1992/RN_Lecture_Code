@@ -15,6 +15,7 @@ module.exports = function (api) {
 						'@util': './src/util',
 						'@components': './src/components',
 						'@assets': './src/assets',
+						'@query': './src/query',
 					},
 				},
 			],

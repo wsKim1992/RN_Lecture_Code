@@ -1,3 +1,4 @@
+import React from 'react';
 import { Controller, useFormContext } from 'react-hook-form';
 import { Text, TextInput, View } from 'react-native';
 
@@ -43,6 +44,15 @@ const Input = ({ label, style, multiline, keyboardType, rules }) => {
 							style={inputStyles}
 							keyboardType={keyboardType}
 						/>
+						{errors[label] && (
+							<View style={InputStyles.inValidMessageViewStyle}>
+								<Text
+									style={InputStyles.inValidMessageTextStyle}
+								>
+									{errors[label].message}
+								</Text>
+							</View>
+						)}
 					</View>
 				);
 			}}

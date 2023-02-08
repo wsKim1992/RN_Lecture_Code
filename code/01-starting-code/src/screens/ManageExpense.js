@@ -1,10 +1,13 @@
 import { useContext, useLayoutEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import loadSingleExpenseQuery from '@query/loadSingleExpenseQuery';
+
 import { ExpensesContext } from '@store/expenses-context';
 
 import { deleteExpense, storeExpense, updateExpense } from '@util/http';
 
+import { formDefaultValue } from '@constants/formDefaultValue';
 import { GlobalStyles } from '@constants/styles';
 
 import ExpenseForm from '@components/ManageExpense/ExpenseForm';
@@ -16,11 +19,7 @@ const ManageExpense = ({ route, navigation }) => {
 	const [isSubmitting, setIsSubmitting] = useState(false);
 	const editedExpenseId = route.params?.expenseId;
 	const isEditing = !!editedExpenseId;
-
-	const selectedExpense = expensesCtx.expenses.find(
-		(expense) => expense.id === editedExpenseId
-	);
-
+	const cachedData = loadSingleExpenseQuery(editedExpenseId);
 	useLayoutEffect(() => {
 		navigation.setOptions({
 			title: isEditing ? 'Edit Expense' : 'Add Expense',
@@ -40,7 +39,6 @@ const ManageExpense = ({ route, navigation }) => {
 
 	async function confirmHandler(expenseData) {
 		//setIsSubmitting(true);
-		console.log(expenseData);
 		/* if (isEditing) {
 			await updateExpense(editedExpenseId, expenseData);
 			expensesCtx.updateExpense(editedExpenseId, expenseData);
@@ -51,8 +49,12 @@ const ManageExpense = ({ route, navigation }) => {
 		navigation.goBack(); */
 	}
 
-	if (isSubmitting) {
+	if (cachedData && cachedData.status == 'loading') {
 		return <LoadingOverlay />;
+	}
+
+	if (cachedData && cachedData.status == 'error') {
+		navigation.goBack();
 	}
 
 	return (
@@ -61,7 +63,14 @@ const ManageExpense = ({ route, navigation }) => {
 				submitButtonLabel={isEditing ? 'Update' : 'Add'}
 				onSubmit={confirmHandler}
 				onCancel={cancelHandler}
-				defaultValues={selectedExpense}
+				defaultValues={
+					editedExpenseId
+						? {
+								...cachedData.data,
+								date: new Date(cachedData.data.date),
+						  }
+						: { ...formDefaultValue }
+				}
 			/>
 			{isEditing && (
 				<View style={styles.deleteContainer}>
