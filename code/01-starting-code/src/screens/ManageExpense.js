@@ -2,6 +2,7 @@ import { useContext, useLayoutEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import loadSingleExpenseQuery from '@query/loadSingleExpenseQuery';
+import updateItemQuery from '@query/updateItemQuery';
 
 import { ExpensesContext } from '@store/expenses-context';
 
@@ -20,6 +21,9 @@ const ManageExpense = ({ route, navigation }) => {
 	const editedExpenseId = route.params?.expenseId;
 	const isEditing = !!editedExpenseId;
 	const cachedData = loadSingleExpenseQuery(editedExpenseId);
+	const { mutateAsync: updateMutateFn, status: updateStatus } =
+		updateItemQuery();
+
 	useLayoutEffect(() => {
 		navigation.setOptions({
 			title: isEditing ? 'Edit Expense' : 'Add Expense',
@@ -47,6 +51,21 @@ const ManageExpense = ({ route, navigation }) => {
 			expensesCtx.addExpense({ ...expenseData, id });
 		}
 		navigation.goBack(); */
+
+		if (isEditing) {
+			try {
+				await updateMutateFn({ id: editedExpenseId, expenseData });
+				expensesCtx.updateExpense(editedExpenseId, expenseData);
+			} catch (err) {
+				if (isEditing && updateStatus == 'error') {
+					navigation.goBack();
+				}
+
+				if (updateStatus == 'success') {
+					expensesCtx.updateExpense(editedExpenseId, expenseData);
+				}
+			}
+		}
 	}
 
 	if (cachedData && cachedData.status == 'loading') {
@@ -55,6 +74,10 @@ const ManageExpense = ({ route, navigation }) => {
 
 	if (cachedData && cachedData.status == 'error') {
 		navigation.goBack();
+	}
+
+	if (isEditing && updateStatus == 'loading') {
+		return <LoadingOverlay />;
 	}
 
 	return (

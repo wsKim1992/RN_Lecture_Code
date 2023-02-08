@@ -32,8 +32,8 @@ export function loadExpense(id) {
 	return axios.get(`${firebaseURL}/expenses/${id}.json`);
 }
 
-export function updateExpense(id, expenseData) {
-	return axios.put(`${firebaseURL}/expenses/${id}.json`, expenseData);
+export async function updateExpense({ id, expenseData }) {
+	return await axios.put(`${firebaseURL}/expenses/${id}.json`, expenseData);
 }
 
 export function deleteExpense(id) {

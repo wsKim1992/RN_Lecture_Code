@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 
 import { loadExpense } from '@util/http';
 
-const LOAD_SINGLE_EXPENSE_KEY = 'LOAD_SINGLE_EXPENSE_KEY';
+import { LOAD_SINGLE_EXPENSE_KEY } from '@constants/keys';
 
 const loadSingleExpenseQuery = (expenseId) => {
 	if (!expenseId) return null;
