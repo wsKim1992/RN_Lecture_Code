@@ -19,7 +19,7 @@ export async function fetchExpenses() {
 	for (const key in response.data) {
 		const expenseObj = {
 			id: key,
-			amount: response.data[key].amount,
+			amount: parseFloat(response.data[key].amount),
 			date: new Date(response.data[key].date),
 			description: response.data[key].description,
 		};
@@ -28,14 +28,14 @@ export async function fetchExpenses() {
 	return expenses;
 }
 
-export function loadExpense(id) {
-	return axios.get(`${firebaseURL}/expenses/${id}.json`);
+export async function loadExpense(id) {
+	return await axios.get(`${firebaseURL}/expenses/${id}.json`);
 }
 
 export async function updateExpense({ id, expenseData }) {
 	return await axios.put(`${firebaseURL}/expenses/${id}.json`, expenseData);
 }
 
-export function deleteExpense(id) {
-	return axios.delete(`${firebaseURL}/expenses/${id}.json`);
+export async function deleteExpense(id) {
+	return await axios.delete(`${firebaseURL}/expenses/${id}.json`);
 }

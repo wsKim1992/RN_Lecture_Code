@@ -32,8 +32,6 @@ const updateItemQuery = () => {
 		},
 		onSuccess: (returnData, paramData) => {
 			const { id } = paramData;
-			console.log('success');
-			console.log(`id : ${id}`);
 			queryClient.invalidateQueries([LOAD_SINGLE_EXPENSE_KEY, id]);
 		},
 	});

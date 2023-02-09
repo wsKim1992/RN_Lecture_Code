@@ -2,6 +2,8 @@ import React from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { StyleSheet, Text, View } from 'react-native';
 
+import { useNavigation } from '@react-navigation/native';
+
 import { GlobalStyles } from '@constants/styles';
 
 import DateInput from '@components/ManageExpense/DateInput';
@@ -54,7 +56,20 @@ const ExpenseForm = ({
 	defaultValues,
 }) => {
 	const methods = useForm({ defaultValues });
-	const { handleSubmit } = methods;
+	const {
+		handleSubmit,
+		formState: { isDirty },
+	} = methods;
+	const navigation = useNavigation();
+
+	const checkBeforeSubmit = () => {
+		if (isDirty) {
+			handleSubmit(onSubmit)();
+		} else {
+			navigation.goBack();
+		}
+	};
+
 	return (
 		<View style={styles.form}>
 			<FormProvider {...methods}>
@@ -89,10 +104,7 @@ const ExpenseForm = ({
 					>
 						Cancel
 					</Button>
-					<Button
-						style={styles.button}
-						onPress={handleSubmit(onSubmit)}
-					>
+					<Button style={styles.button} onPress={checkBeforeSubmit}>
 						{submitButtonLabel}
 					</Button>
 				</View>

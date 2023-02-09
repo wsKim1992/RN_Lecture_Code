@@ -1,8 +1,10 @@
 import { useContext, useLayoutEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 
+import deleteItemQuery from '@query/deleteItemQuery';
 import loadSingleExpenseQuery from '@query/loadSingleExpenseQuery';
 import updateItemQuery from '@query/updateItemQuery';
+import uploadNewItemQuery from '@query/uploadNewItemQuery';
 
 import { ExpensesContext } from '@store/expenses-context';
 
@@ -11,18 +13,21 @@ import { deleteExpense, storeExpense, updateExpense } from '@util/http';
 import { formDefaultValue } from '@constants/formDefaultValue';
 import { GlobalStyles } from '@constants/styles';
 
+import DeleteComponent from '@components/ManageExpense/DeleteComponent';
 import ExpenseForm from '@components/ManageExpense/ExpenseForm';
-import IconButton from '@components/UI/IconButton';
 import LoadingOverlay from '@components/UI/LoadingOverlay';
 
 const ManageExpense = ({ route, navigation }) => {
 	const expensesCtx = useContext(ExpensesContext);
-	const [isSubmitting, setIsSubmitting] = useState(false);
 	const editedExpenseId = route.params?.expenseId;
 	const isEditing = !!editedExpenseId;
 	const cachedData = loadSingleExpenseQuery(editedExpenseId);
-	const { mutateAsync: updateMutateFn, status: updateStatus } =
-		updateItemQuery();
+	const {
+		data: returnedData,
+		mutateAsync: updateMutateFn,
+		status: updateStatus,
+	} = isEditing ? updateItemQuery() : uploadNewItemQuery();
+	const { status: deleteStatus } = deleteItemQuery();
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
@@ -30,40 +35,25 @@ const ManageExpense = ({ route, navigation }) => {
 		});
 	}, [navigation, isEditing]);
 
-	async function deleteExpenseHandler() {
-		setIsSubmitting(true);
-		await deleteExpense(editedExpenseId);
-		expensesCtx.deleteExpense(editedExpenseId);
-		navigation.goBack();
-	}
-
 	function cancelHandler() {
 		navigation.goBack();
 	}
 
 	async function confirmHandler(expenseData) {
-		//setIsSubmitting(true);
-		/* if (isEditing) {
-			await updateExpense(editedExpenseId, expenseData);
-			expensesCtx.updateExpense(editedExpenseId, expenseData);
-		} else {
-			const id = await storeExpense(expenseData);
-			expensesCtx.addExpense({ ...expenseData, id });
-		}
-		navigation.goBack(); */
-
 		if (isEditing) {
 			try {
 				await updateMutateFn({ id: editedExpenseId, expenseData });
 				expensesCtx.updateExpense(editedExpenseId, expenseData);
+				navigation.goBack();
 			} catch (err) {
-				if (isEditing && updateStatus == 'error') {
-					navigation.goBack();
-				}
-
-				if (updateStatus == 'success') {
-					expensesCtx.updateExpense(editedExpenseId, expenseData);
-				}
+				console.error(err);
+			}
+		} else {
+			try {
+				await updateMutateFn(expenseData);
+				navigation.goBack();
+			} catch (err) {
+				console.error(err);
 			}
 		}
 	}
@@ -77,6 +67,10 @@ const ManageExpense = ({ route, navigation }) => {
 	}
 
 	if (isEditing && updateStatus == 'loading') {
+		return <LoadingOverlay />;
+	}
+
+	if (isEditing && deleteStatus == 'loading') {
 		return <LoadingOverlay />;
 	}
 
@@ -95,16 +89,7 @@ const ManageExpense = ({ route, navigation }) => {
 						: { ...formDefaultValue }
 				}
 			/>
-			{isEditing && (
-				<View style={styles.deleteContainer}>
-					<IconButton
-						icon="trash"
-						color={GlobalStyles.colors.error500}
-						size={36}
-						onPress={deleteExpenseHandler}
-					/>
-				</View>
-			)}
+			{isEditing && <DeleteComponent editedExpenseId={editedExpenseId} />}
 		</View>
 	);
 };
