@@ -1,0 +1,5 @@
+export const errorType = {
+	EMAIL_NOT_FOUND: 'EMAIL_NOT_FOUND',
+	INVALID_PASSWORD: 'INVALID_PASSWORD',
+	INVALID_REQUEST: '적절하지 않은 요청',
+};

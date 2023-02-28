@@ -1,99 +1,82 @@
-import { useState } from 'react';
+import { FormProvider, useForm } from 'react-hook-form';
 import { StyleSheet, View } from 'react-native';
 
+import LogIn from '@query/logIn';
+
+import { errorType } from '@constants/errorType';
+import { AuthRules, customErrorMessage } from '@constants/rules';
+import { authFormName } from '@constants/variables';
+
 import Button from '@components/ui/Button';
+import LoadingOverlay from '@components/ui/LoadingOverlay';
 
 import Input from './Input';
 
-const AuthForm = ({ isLogin, onSubmit, credentialsInvalid }) => {
-	const [enteredEmail, setEnteredEmail] = useState('');
-	const [enteredConfirmEmail, setEnteredConfirmEmail] = useState('');
-	const [enteredPassword, setEnteredPassword] = useState('');
-	const [enteredConfirmPassword, setEnteredConfirmPassword] = useState('');
-
-	const {
-		email: emailIsInvalid,
-		confirmEmail: emailsDontMatch,
-		password: passwordIsInvalid,
-		confirmPassword: passwordsDontMatch,
-	} = credentialsInvalid;
-
-	function updateInputValueHandler(inputType, enteredValue) {
-		switch (inputType) {
-			case 'email':
-				setEnteredEmail(enteredValue);
-				break;
-			case 'confirmEmail':
-				setEnteredConfirmEmail(enteredValue);
-				break;
-			case 'password':
-				setEnteredPassword(enteredValue);
-				break;
-			case 'confirmPassword':
-				setEnteredConfirmPassword(enteredValue);
-				break;
+const AuthForm = () => {
+	const methods = useForm({ defaultValues: { email: '', password: '' } });
+	const { handleSubmit, setFocus, resetField, setError } = methods;
+	const { mutateAsync, status } = LogIn();
+	async function submitHandler(data) {
+		try {
+			await mutateAsync(data);
+		} catch (error) {
+			if (error !== errorType.INVALID_REQUEST) {
+				resetField(error);
+				setError(
+					error,
+					{
+						type: 'custom',
+						message: customErrorMessage[error].message,
+					},
+					{ shouldFocus: true }
+				);
+			} else {
+				resetField(authFormName.email);
+				setError(
+					authFormName.email,
+					{
+						type: 'custom',
+						message: customErrorMessage.email.message,
+					},
+					{ shouldFocus: true }
+				);
+			}
+			console.error(error);
 		}
 	}
 
-	function submitHandler() {
-		onSubmit({
-			email: enteredEmail,
-			confirmEmail: enteredConfirmEmail,
-			password: enteredPassword,
-			confirmPassword: enteredConfirmPassword,
-		});
-	}
+	const errorHandler = (errors) => {
+		const firstNameToFocus = Object.keys(errors);
+		setFocus(firstNameToFocus[firstNameToFocus.length - 1]);
+	};
+
+	if (status === 'loading') return <LoadingOverlay />;
 
 	return (
 		<View style={styles.form}>
-			<View>
-				<Input
-					label="Email Address"
-					onUpdateValue={updateInputValueHandler.bind(this, 'email')}
-					value={enteredEmail}
-					keyboardType="email-address"
-					isInvalid={emailIsInvalid}
-				/>
-				{!isLogin && (
+			<FormProvider {...methods}>
+				<View>
 					<Input
-						label="Confirm Email Address"
-						onUpdateValue={updateInputValueHandler.bind(
-							this,
-							'confirmEmail'
-						)}
-						value={enteredConfirmEmail}
+						label="Email Address"
 						keyboardType="email-address"
-						isInvalid={emailsDontMatch}
+						name="email"
+						rules={AuthRules.email}
 					/>
-				)}
-				<Input
-					label="Password"
-					onUpdateValue={updateInputValueHandler.bind(
-						this,
-						'password'
-					)}
-					secure
-					value={enteredPassword}
-					isInvalid={passwordIsInvalid}
-				/>
-				{!isLogin && (
 					<Input
-						label="Confirm Password"
-						onUpdateValue={updateInputValueHandler.bind(
-							this,
-							'confirmPassword'
-						)}
+						label="Password"
 						secure
-						value={enteredConfirmPassword}
-						isInvalid={passwordsDontMatch}
+						name="password"
+						rules={AuthRules.password}
 					/>
-				)}
-				<View style={styles.buttons}>
-					<Button onPress={submitHandler}>
-						{isLogin ? 'Log In' : 'Sign Up'}
-					</Button>
+					<View style={styles.buttons}>
+						<Button
+							onPress={handleSubmit(submitHandler, errorHandler)}
+						>
+							Log In
+						</Button>
+					</View>
 				</View>
-			</View>
+			</FormProvider>
 		</View>
 	);
 };

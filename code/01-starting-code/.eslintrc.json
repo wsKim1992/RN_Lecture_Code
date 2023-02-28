@@ -21,7 +21,7 @@
 	"rules": {
 		"prettier/prettier": "error",
 		"no-mixed-spaces-and-tabs": ["error", "smart-tabs"],
-		"no-console": "error",
+		"no-console": "off",
 		"no-alert": "error",
 		"no-const-assign": "error",
 		"no-constant-binary-expression": "error",

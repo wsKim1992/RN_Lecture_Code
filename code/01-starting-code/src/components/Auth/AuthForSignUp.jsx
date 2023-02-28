@@ -1,3 +1,4 @@
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { useNavigation } from '@react-navigation/native';
@@ -6,33 +7,26 @@ import { Colors } from '@constants/styles';
 
 import FlatButton from '@components/ui/FlatButton';
 
-import AuthForm from './AuthForm';
+import AuthFormFormSignUp from './AuthFormForSignUp';
 
-const AuthContent = ({ isLogin }) => {
+const AuthForSignUp = () => {
 	const navigation = useNavigation();
-
-	function switchAuthModeHandler() {
-		// Todo
-		if (isLogin) {
-			navigation.replace('Signup');
-		} else {
-			navigation.replace('Login');
-		}
-	}
-
+	const navigateToLogIn = () => {
+		navigation.replace('Login');
+	};
 	return (
 		<View style={styles.authContent}>
-			<AuthForm />
+			<AuthFormFormSignUp />
 			<View style={styles.buttons}>
-				<FlatButton onPress={switchAuthModeHandler}>
-					Create a new user
+				<FlatButton onPress={navigateToLogIn.bind(this)}>
+					Log In
 				</FlatButton>
 			</View>
 		</View>
 	);
 };
 
-export default AuthContent;
+export default AuthForSignUp;
 
 const styles = StyleSheet.create({
 	authContent: {

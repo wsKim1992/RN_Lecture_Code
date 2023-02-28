@@ -1,12 +1,18 @@
+import React from 'react';
+
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { StatusBar } from 'expo-status-bar';
+
+import AuthContextProvider, { AuthContext } from '@store/auth-context';
+
+import { Colors } from '@constants/styles';
 
 import LoginScreen from '@screens/LoginScreen';
 import SignupScreen from '@screens/SignupScreen';
 import WelcomeScreen from '@screens/WelcomeScreen';
-import { StatusBar } from 'expo-status-bar';
-
-import { Colors } from '@constants/styles';
 
 const Stack = createNativeStackNavigator();
 
@@ -40,19 +46,27 @@ const AuthenticatedStack = () => {
 };
 
 const Navigation = () => {
+	const authCtx = React.useContext(AuthContext);
+
 	return (
 		<NavigationContainer>
-			<AuthStack />
+			{!authCtx.isAuthenticated && <AuthStack />}
+			{authCtx.isAuthenticated && <AuthenticatedStack />}
 		</NavigationContainer>
 	);
 };
 
+const queryClient = new QueryClient();
+
 const App = () => {
 	return (
 		<>
-			<StatusBar style="light" />
-
-			<Navigation />
+			<QueryClientProvider client={queryClient}>
+				<StatusBar style="light" />
+				<AuthContextProvider>
+					<Navigation />
+				</AuthContextProvider>
+			</QueryClientProvider>
 		</>
 	);
 };
