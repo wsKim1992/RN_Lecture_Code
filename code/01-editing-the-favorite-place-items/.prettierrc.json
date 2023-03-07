@@ -1,0 +1,26 @@
+{
+	"trailingComma": "es5",
+	"tabWidth": 4,
+	"printWidth": 80,
+	"useTabs": true,
+	"semi": true,
+	"singleQuote": false,
+	"arrowParens": "always",
+	"endOfLine": "auto",
+	"importOrder": [
+		"^react(.*)",
+		"^react-native(.*)",
+		"^@react(.*)",
+		"^@query/(.*)$",
+		"<THIRD_PARTY_MODULES>",
+		"^@store/(.*)$",
+		"^@util/(.*)$",
+		"^@constants/(.*)$",
+		"^@assets/(.*)$",
+		"^@components/(.*)$",
+		"@/(.*)",
+		"^[./]"
+	],
+	"importOrderSeparation": true,
+	"importOrderSortSpecifiers": true
+}
