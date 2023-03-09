@@ -1,21 +1,19 @@
-import React from 'react';
-
 import { useMutation } from '@tanstack/react-query';
 
-import { AuthContext } from '@store/auth-context';
+import AuthMobXContext from '@store/AuthContext';
 
 import { login } from '@util/auth';
 
 import { USER_KEY } from '@constants/variables';
 
 const LogIn = () => {
-	const { authenticate } = React.useContext(AuthContext);
+	const { setAuthData } = AuthMobXContext;
 	return useMutation({
 		mutationKey: [USER_KEY],
 		mutationFn: (data) => login(data),
-		onSuccess: (data, variables) => {
-			const { refreshToken, idToken } = data.data;
-			authenticate(idToken);
+		onSuccess: (data) => {
+			console.log('success log in');
+			setAuthData(data.data);
 		},
 		useErrorBoundary: false,
 	});

@@ -8,16 +8,12 @@ import FlatButton from '@components/ui/FlatButton';
 
 import AuthForm from './AuthForm';
 
-const AuthContent = ({ isLogin }) => {
+const AuthContent = () => {
 	const navigation = useNavigation();
 
 	function switchAuthModeHandler() {
 		// Todo
-		if (isLogin) {
-			navigation.replace('Signup');
-		} else {
-			navigation.replace('Login');
-		}
+		navigation.replace('Signup');
 	}
 
 	return (

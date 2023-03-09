@@ -34,4 +34,5 @@ export const AuthRules = {
 export const customErrorMessage = {
 	password: { message: '비밀번호가 틀렸습니다' },
 	email: { message: '존재하지 않는 계정 입니다.' },
+	emailAlreadyExists: { message: '이미 존재하는 계정 입니다.' },
 };

@@ -6,4 +6,5 @@ export const authFormName = {
 	email: 'email',
 	password: 'password',
 	custom: 'custom',
+	emailAlreadyExists: 'emailAlreadyExists',
 };

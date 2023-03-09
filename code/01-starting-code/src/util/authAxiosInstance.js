@@ -38,6 +38,9 @@ authAxiosInstance.interceptors.response.use(
 			case errorType.EMAIL_NOT_FOUND: {
 				return Promise.reject(authFormName.email);
 			}
+			case errorType.EMAIL_EXISTS: {
+				return Promise.reject(authFormName.email);
+			}
 			default: {
 				return Promise.reject(errorType.INVALID_REQUEST);
 			}
