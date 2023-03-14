@@ -32,7 +32,7 @@
 		"no-unused-vars": "error",
 		"no-undef": "error",
 		"no-var": "error",
-		"no-constant-binary-expression": "error",
+		"no-constant-binary-expression": "off",
 		"no-duplicate-case": "error",
 		"no-case-declarations": "off",
 		"no-func-assign": "error",
