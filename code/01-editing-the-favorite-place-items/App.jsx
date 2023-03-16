@@ -43,6 +43,7 @@ const App = () => {
 					component={AddPlace}
 					options={{
 						title: "Add a new Place",
+						headerShown: true,
 					}}
 				/>
 			</Stack.Navigator>
@@ -51,12 +52,3 @@ const App = () => {
 };
 
 export default App;
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: "#fff",
-		alignItems: "center",
-		justifyContent: "center",
-	},
-});

@@ -1,48 +1,28 @@
 import React from "react";
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 
-import { Colors } from "@constants/colors";
+import DatePickerUI from "./DatePickerUI";
+import InputUI from "./InputUI";
 
 const PlaceForm = () => {
-	const [enteredTitle, setEnteredTitle] = React.useState("");
-
-	function changeTitleHandler(enteredText) {
-		setEnteredTitle(enteredText);
-	}
-
 	return (
-		<ScrollView style={styles.form}>
-			<View>
-				<Text style={styles.label}>Title</Text>
-				<TextInput
-					style={styles.input}
-					onChangeText={changeTitleHandler}
-					value={enteredTitle}
-				/>
+		<View style={styles.container}>
+			<View style={styles.inputBox}>
+				<InputUI />
+				<DatePickerUI />
 			</View>
-		</ScrollView>
+		</View>
 	);
 };
 
 export default PlaceForm;
 
 const styles = StyleSheet.create({
-	form: {
-		flex: 1,
-		padding: 24,
+	container: {
+		padding: 15,
 	},
-	label: {
-		fontWeight: "bold",
-		marginBottom: 4,
-		color: Colors.primary500,
-	},
-	input: {
-		marginVertical: 0,
-		paddingHorizontal: 4,
-		paddingVertical: 8,
-		fontSize: 16,
-		borderBottomColor: Colors.primary700,
-		borderBottomWidth: 2,
-		backgroundColor: Colors.primary100,
+	inputBox: {
+		flexDirection: "row",
+		backgroundColor: "purple",
 	},
 });
