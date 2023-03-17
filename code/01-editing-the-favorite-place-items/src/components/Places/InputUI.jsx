@@ -11,12 +11,12 @@ const InputUI = () => {
 	}
 	return (
 		<View style={styles.container}>
-			{/* <Text style={styles.label}>Title</Text>
+			<Text style={styles.label}>Title</Text>
 			<TextInput
 				style={styles.input}
 				onChangeText={changeTitleHandler}
 				value={enteredTitle}
-			/> */}
+			/>
 		</View>
 	);
 };
@@ -26,8 +26,7 @@ export default InputUI;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: "#fff",
-		height: 100,
+		paddingHorizontal: 15,
 	},
 	label: {
 		fontWeight: "bold",
@@ -39,7 +38,7 @@ const styles = StyleSheet.create({
 		marginVertical: 0,
 		paddingHorizontal: 4,
 		paddingVertical: 8,
-		fontSize: 16,
+		fontSize: 20,
 		borderBottomColor: Colors.primary700,
 		borderBottomWidth: 2,
 		backgroundColor: Colors.primary100,

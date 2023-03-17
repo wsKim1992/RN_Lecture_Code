@@ -18,7 +18,7 @@ const DatePickerUI = () => {
 	return (
 		<>
 			<View style={styles.container}>
-				{/* <Text style={styles.label}>Date</Text>
+				<Text style={styles.label}>Date</Text>
 				<Pressable
 					onPress={() => setShowCalendar(true)}
 					style={({ pressed }) => [
@@ -26,12 +26,14 @@ const DatePickerUI = () => {
 						pressed && styles.inputPressed,
 					]}
 				>
-					<Text>{`${selectedDate.getFullYear()}-${
+					<Text
+						style={styles.inputText}
+					>{`${selectedDate.getFullYear()}-${
 						selectedDate.getMonth() + 1
 					}-${selectedDate.getDate()}`}</Text>
-				</Pressable> */}
+				</Pressable>
 			</View>
-			{/* {showCalendar && (
+			{showCalendar && (
 				<DateTimePicker
 					mode="date"
 					display="calendar"
@@ -41,7 +43,7 @@ const DatePickerUI = () => {
 					accentColor={Colors.primary400}
 					themeVariant="dark"
 				/>
-			)} */}
+			)}
 		</>
 	);
 };
@@ -51,8 +53,7 @@ export default DatePickerUI;
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		height: 100,
-		backgroundColor: "blue",
+		paddingHorizontal: 15,
 	},
 	input: {
 		width: "100%",
@@ -65,6 +66,9 @@ const styles = StyleSheet.create({
 		borderBottomColor: Colors.primary700,
 		borderBottomWidth: 2,
 		backgroundColor: Colors.primary100,
+	},
+	inputText: {
+		fontSize: 20,
 	},
 	label: {
 		fontWeight: "bold",
