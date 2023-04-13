@@ -1,24 +1,58 @@
 import React from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 import { Colors } from "@constants/colors";
 
-const DatePickerUI = () => {
-	const [selectedDate, setSelectedDate] = React.useState(new Date());
-	const [showCalendar, setShowCalendar] = React.useState(true);
+const DatePickerController = ({ label, rule }) => {
+	const { control } = useFormContext();
+
+	return (
+		<Controller
+			control={control}
+			name={label}
+			rules={rule}
+			render={({
+				field: { onChange, onBlur, value, ref },
+				fieldState: { inValid, error },
+			}) => {
+				return (
+					<DatePickerUI
+						onChange={onChange}
+						onBlur={onBlur}
+						value={value}
+						inValid={inValid}
+						error={error}
+					/>
+				);
+			}}
+		/>
+	);
+};
+
+const DatePickerUI = ({ onChange, value, ref, inValid, error }) => {
+	/* const [selectedDate, setSelectedDate] = React.useState(value); */
+	const [showCalendar, setShowCalendar] = React.useState(false);
+
 	const setDate = (event) => {
 		const {
 			nativeEvent: { timestamp },
 		} = event;
-		setSelectedDate(new Date(timestamp));
+		/* setSelectedDate(new Date(timestamp)); */
 		setShowCalendar(false);
+		onChange(new Date(timestamp));
 	};
 	return (
 		<>
 			<View style={styles.container}>
-				<Text style={styles.label}>Date</Text>
+				<View style={styles.titleBox}>
+					<Text style={styles.label}>Date</Text>
+					{(error || inValid) && (
+						<Text style={styles.labelError}>{error?.message}</Text>
+					)}
+				</View>
 				<Pressable
 					onPress={() => setShowCalendar(true)}
 					style={({ pressed }) => [
@@ -26,11 +60,9 @@ const DatePickerUI = () => {
 						pressed && styles.inputPressed,
 					]}
 				>
-					<Text
-						style={styles.inputText}
-					>{`${selectedDate.getFullYear()}-${
-						selectedDate.getMonth() + 1
-					}-${selectedDate.getDate()}`}</Text>
+					<Text style={styles.inputText}>{`${value.getFullYear()}-${
+						value.getMonth() + 1
+					}-${value.getDate()}`}</Text>
 				</Pressable>
 			</View>
 			{showCalendar && (
@@ -38,7 +70,7 @@ const DatePickerUI = () => {
 					mode="date"
 					display="calendar"
 					onChange={setDate.bind(this)}
-					value={selectedDate}
+					value={value}
 					textColor={Colors.primary200}
 					accentColor={Colors.primary400}
 					themeVariant="dark"
@@ -48,12 +80,17 @@ const DatePickerUI = () => {
 	);
 };
 
-export default DatePickerUI;
+export default DatePickerController;
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingHorizontal: 15,
+	},
+	titleBox: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
 	},
 	input: {
 		width: "100%",
@@ -74,6 +111,9 @@ const styles = StyleSheet.create({
 		fontWeight: "bold",
 		marginBottom: 4,
 		color: Colors.primary500,
+	},
+	labelError: {
+		color: "red",
 	},
 	inputPressed: {
 		opacity: 0.75,

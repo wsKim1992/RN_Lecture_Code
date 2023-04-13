@@ -7,7 +7,8 @@
 			"@store/*": ["./store/*"],
 			"@util/*": ["./util/*"],
 			"@components/*": ["./components/*"],
-			"@query/*": ["./query/*"]
+			"@query/*": ["./query/*"],
+			"@public/*": ["./puclic/*"]
 		}
 	},
 	"exclude": ["node_modules"]

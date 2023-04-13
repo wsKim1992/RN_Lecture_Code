@@ -1,23 +1,44 @@
 import React from "react";
+import { Controller, useFormContext } from "react-hook-form";
 import { StyleSheet, Text, TextInput, View } from "react-native";
 
 import { Colors } from "@constants/colors";
 
-const InputUI = () => {
-	const [enteredTitle, setEnteredTitle] = React.useState("");
+const InputUI = ({ label, rule }) => {
+	const { control } = useFormContext();
 
-	function changeTitleHandler(enteredText) {
-		setEnteredTitle(enteredText);
-	}
 	return (
-		<View style={styles.container}>
-			<Text style={styles.label}>Title</Text>
-			<TextInput
-				style={styles.input}
-				onChangeText={changeTitleHandler}
-				value={enteredTitle}
-			/>
-		</View>
+		<Controller
+			control={control}
+			name={label}
+			rules={rule}
+			render={({
+				field: { onChange, onBlur, value, ref },
+				fieldState: { inValid, error },
+			}) => {
+				return (
+					<View style={styles.container}>
+						<View style={styles.titleBox}>
+							<Text style={styles.label}>Title</Text>
+							{(inValid || error) && (
+								<Text style={[styles.label, styles.labelError]}>
+									{error?.message}
+								</Text>
+							)}
+						</View>
+						<TextInput
+							style={styles.input}
+							keyboardType="default"
+							onChangeText={onChange}
+							onBlur={onBlur}
+							value={value}
+							ref={ref}
+							autoFocus
+						/>
+					</View>
+				);
+			}}
+		/>
 	);
 };
 
@@ -27,11 +48,19 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingHorizontal: 15,
+		height: "auto",
+	},
+	titleBox: {
+		flexDirection: "row",
+		alignItems: "center",
+		justifyContent: "space-between",
 	},
 	label: {
 		fontWeight: "bold",
-		marginBottom: 4,
 		color: Colors.primary500,
+	},
+	labelError: {
+		color: "red",
 	},
 	input: {
 		borderRadius: 15,
